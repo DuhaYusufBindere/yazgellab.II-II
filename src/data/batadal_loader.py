@@ -72,3 +72,21 @@ def ensure_temporal_order(df):
             print("✅ Veri sırası kontrol edildi: İndeks sıralaması korundu.")
             
     return df
+
+def check_missing(df):
+    """
+    Returns:
+        pd.DataFrame: Eksik değerleri doldurulmuş dataframe.
+    """
+    missing = df.isnull().sum()
+    total_missing = missing.sum()
+    if total_missing > 0:
+        print(f"Eksik değer sayısı: {total_missing}")
+        print(missing[missing > 0])
+        # Sadece sayısal kolonları enterpole et (DATETIME vb. hata vermemesi için)
+        numeric_cols = df.select_dtypes(include='number').columns
+        df[numeric_cols] = df[numeric_cols].interpolate(method="linear")
+        df = df.bfill().ffill()
+    else:
+        print("[OK] Eksik veri kontrolü: Eksik değer bulunamadı.")
+    return df
