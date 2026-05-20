@@ -15,3 +15,18 @@ def read_valve1(config=None):
             df = pd.read_csv(filepath, sep=";")
             dfs.append(df)
     return dfs
+
+
+def read_valve2(config=None):
+    if config is None:
+        config = load_config()
+    skab_path = config["data"]["skab_path"]
+    valve2_path = os.path.join(skab_path, "valve2")
+    dfs = []
+    for filename in sorted(os.listdir(valve2_path)):
+        if filename.endswith(".csv"):
+            filepath = os.path.join(valve2_path, filename)
+            df = pd.read_csv(filepath, sep=";")
+            dfs.append(df)
+    return dfs
+
