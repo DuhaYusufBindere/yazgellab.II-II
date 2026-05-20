@@ -22,3 +22,14 @@ def load_batadal_training(config=None):
     print(f"Sütunlar: {df.columns.tolist()}")
 
     return df
+
+def drop_time_columns(df):
+    """
+    Returns:
+        pd.DataFrame: Zaman kolonları çıkarılmış dataframe.
+    """
+    time_cols = ["DATETIME"]
+    existing = [c for c in time_cols if c in df.columns]
+    if existing:
+        print(f"Zaman kolonları çıkarıldı: {existing}")
+    return df.drop(columns=existing)
