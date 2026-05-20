@@ -28,3 +28,15 @@ def fit_scaler_on_train(scaler, X_train):
     numeric_cols = X_train.select_dtypes(include=['number']).columns
     scaler.fit(X_train[numeric_cols])
     return scaler
+
+def transform_with_scaler(scaler, df):
+
+    if df is None:
+        return None
+        
+    numeric_cols = df.select_dtypes(include=['number']).columns
+    df_transformed = df.copy()
+    
+    # Sayısal kolonları ölçeklendir
+    df_transformed[numeric_cols] = scaler.transform(df[numeric_cols])
+    return df_transformed
