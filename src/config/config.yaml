@@ -6,6 +6,7 @@ data:
   train_split: 0.6
   val_split: 0.2
   test_split: 0.2
+  skab_n_splits: 5
 
 deep_learning:
   max_epochs: 50
