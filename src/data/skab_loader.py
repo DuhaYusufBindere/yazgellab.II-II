@@ -38,3 +38,10 @@ def read_valve2(config=None):
 def concat_skab(valve1_dfs, valve2_dfs):
     all_dfs = valve1_dfs + valve2_dfs
     return pd.concat(all_dfs, ignore_index=True)
+
+
+def drop_non_feature_columns(df):
+    cols_to_drop = ["datetime", "changepoint"]
+    existing = [c for c in cols_to_drop if c in df.columns]
+    return df.drop(columns=existing)
+
