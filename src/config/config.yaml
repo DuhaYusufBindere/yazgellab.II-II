@@ -2,7 +2,7 @@
 
 data:
   skab_path: "data/SKAB"
-  batadal_path: "data/BATADAL/Training Dataset 2.csv"
+  batadal_path: "data/BATADAL/BATADAL_dataset04.csv"
   train_split: 0.6
   val_split: 0.2
   test_split: 0.2
