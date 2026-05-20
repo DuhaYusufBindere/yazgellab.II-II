@@ -16,3 +16,15 @@ def get_scaler(config=None):
     else:
         print("[INFO] MinMaxScaler secildi.")
         return MinMaxScaler()
+    
+def fit_scaler_on_train(scaler, X_train):
+    """
+    Veri sızıntısını (Data Leakage) önlemek amacıyla scaler nesnesini 
+    sadece Train (Eğitim) verisi üzerinde fit eden fonksiyon.
+    """
+    print("[INFO] Scaler sadece Train verisi uzerinde fit ediliyor...")
+    
+    # Sadece sayısal (numeric) özellikleri fit edelim (source_file, source_group vs. varsa fit etmemek için)
+    numeric_cols = X_train.select_dtypes(include=['number']).columns
+    scaler.fit(X_train[numeric_cols])
+    return scaler
