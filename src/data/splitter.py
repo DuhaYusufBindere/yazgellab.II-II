@@ -42,3 +42,20 @@ def batadal_val_split(X, y, config=None):
     y_val = y.iloc[val_start:val_end]
     
     return X_val, y_val
+
+
+def batadal_test_split(X, y, config=None):
+
+    if config is None:
+        config = load_config()
+        
+    train_split = config["data"].get("train_split", 0.6)
+    val_split = config["data"].get("val_split", 0.2)
+    
+    n_samples = len(X)
+    test_start = int(n_samples * (train_split + val_split))
+    
+    X_test = X.iloc[test_start:]
+    y_test = y.iloc[test_start:]
+    
+    return X_test, y_test
