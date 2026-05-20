@@ -30,3 +30,7 @@ def read_valve2(config=None):
             dfs.append(df)
     return dfs
 
+
+def concat_skab(valve1_dfs, valve2_dfs):
+    all_dfs = valve1_dfs + valve2_dfs
+    return pd.concat(all_dfs, ignore_index=True)
