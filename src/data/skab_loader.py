@@ -13,6 +13,7 @@ def read_valve1(config=None):
         if filename.endswith(".csv"):
             filepath = os.path.join(valve1_path, filename)
             df = pd.read_csv(filepath, sep=";")
+            df["source_group"] = "valve1"
             dfs.append(df)
     return dfs
 
@@ -27,6 +28,7 @@ def read_valve2(config=None):
         if filename.endswith(".csv"):
             filepath = os.path.join(valve2_path, filename)
             df = pd.read_csv(filepath, sep=";")
+            df["source_group"] = "valve2"
             dfs.append(df)
     return dfs
 
