@@ -33,3 +33,20 @@ def drop_time_columns(df):
     if existing:
         print(f"Zaman kolonları çıkarıldı: {existing}")
     return df.drop(columns=existing)
+
+def separate_target(df):
+    """
+    Returns:
+        X (pd.DataFrame): Sensör değerlerini içeren özellik matrisi.
+        y (pd.Series): 0 ve 1 olarak kodlanmış anomali etiketleri.
+    """
+    target_col = "ATT_FLAG"
+    if target_col not in df.columns:
+        raise KeyError(f"Hedef kolon '{target_col}' veri setinde bulunamadı.")
+    
+    # Hedef değişkeni kopyala ve parse et (-999 -> 0, 1 -> 1)
+    y = df[target_col].copy()
+    y = y.map({-999: 0, 1: 1})
+    
+    X = df.drop(columns=[target_col])
+    return X, y
