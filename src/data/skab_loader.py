@@ -45,3 +45,8 @@ def drop_non_feature_columns(df):
     existing = [c for c in cols_to_drop if c in df.columns]
     return df.drop(columns=existing)
 
+
+def separate_target(df):
+    y = df["anomaly"].copy()
+    X = df.drop(columns=["anomaly"])
+    return X, y
