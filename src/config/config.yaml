@@ -24,6 +24,7 @@ automata:
   # Sabit karşılaştırma senaryosu için default değerler (PDF'te belirtilen)
   default_window_size: 4
   default_alphabet_size: 3
+  pca_n_components: 1
 
 experiment:
   seeds: [42, 123, 2026, 7, 999]
