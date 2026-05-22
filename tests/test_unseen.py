@@ -8,9 +8,10 @@ class TestUnseenManagement(unittest.TestCase):
         state_dictionary = {"abc", "xyz", "mno"}
         unseen_pattern = "adc"
         
-        nearest = find_nearest_pattern(unseen_pattern, state_dictionary)
+        result = find_nearest_pattern(unseen_pattern, state_dictionary)
         
-        self.assertEqual(nearest, "abc", "En yakın pattern 'abc' olarak bulunmali.")
+        self.assertEqual(result["mapped_to"], "abc", "En yakın pattern 'abc' olarak bulunmali.")
+        self.assertEqual(result["nearest_distance"], 1, "Mesafe farki 1 olmali.")
 
 
 if __name__ == "__main__":

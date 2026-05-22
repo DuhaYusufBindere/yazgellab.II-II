@@ -19,6 +19,9 @@ def find_nearest_pattern(unseen_pattern, state_dictionary):
             min_distance = dist
             best_match = known_pattern
             
-    return best_match
+    return {
+        "mapped_to": best_match,
+        "nearest_distance": min_distance
+    }
 
 
