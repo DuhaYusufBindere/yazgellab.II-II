@@ -19,3 +19,11 @@ def sax_transform(paa_values, alphabet_size):
         symbols.append(symbol)
         
     return "".join(symbols)
+
+
+def sax_from_config(paa_values, config=None):
+    from src.config.config_loader import load_config
+    if config is None:
+        config = load_config()
+    alphabet_size = config.get("automata", {}).get("default_alphabet_size", 3)
+    return sax_transform(paa_values, alphabet_size)
