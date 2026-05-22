@@ -21,3 +21,12 @@ def count_transitions(patterns):
         counts[curr_state][next_state] += 1
     return counts
 
+
+def compute_probabilities(counts):
+    transitions = defaultdict(dict)
+    for state, next_states in counts.items():
+        total = sum(next_states.values())
+        for next_state, count in next_states.items():
+            transitions[state][next_state] = count / total
+    return {k: dict(v) for k, v in transitions.items()}
+
