@@ -56,7 +56,7 @@ def check_missing(df):
     missing = df.isnull().sum()
     total_missing = missing.sum()
     if total_missing > 0:
-        print(f"Eksik deger sayisi: {total_missing}")
+        print(f"Eksik değer sayısı: {total_missing}")
         print(missing[missing > 0])
         df = df.interpolate(method="linear").bfill().ffill()
     return df

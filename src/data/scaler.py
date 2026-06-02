@@ -11,10 +11,10 @@ def get_scaler(config=None):
     scaler_type = config.get("data", {}).get("scaler_type", "minmax")
     
     if scaler_type == "standard":
-        print("[INFO] StandardScaler secildi.")
+        print("[INFO] StandardScaler seçildi.")
         return StandardScaler()
     else:
-        print("[INFO] MinMaxScaler secildi.")
+        print("[INFO] MinMaxScaler seçildi.")
         return MinMaxScaler()
     
 def fit_scaler_on_train(scaler, X_train):
@@ -22,7 +22,7 @@ def fit_scaler_on_train(scaler, X_train):
     Veri sızıntısını (Data Leakage) önlemek amacıyla scaler nesnesini 
     sadece Train (Eğitim) verisi üzerinde fit eden fonksiyon.
     """
-    print("[INFO] Scaler sadece Train verisi uzerinde fit ediliyor...")
+    print("[INFO] Scaler sadece Train verisi üzerinde fit ediliyor...")
     
     # Sadece sayısal (numeric) özellikleri fit edelim (source_file, source_group vs. varsa fit etmemek için)
     numeric_cols = X_train.select_dtypes(include=['number']).columns

@@ -31,11 +31,11 @@ class EarlyStopping:
         elif val_loss > self.best_loss - self.delta:
             self.counter += 1
             if self.verbose:
-                print(f"[EarlyStopping] Iyilesme yok. Sayac: {self.counter} / {self.patience}")
+                print(f"[EarlyStopping] İyileşme yok. Sayaç: {self.counter} / {self.patience}")
             if self.counter >= self.patience:
                 self.early_stop = True
                 if self.verbose:
-                    print("[EarlyStopping] Limit asildi. Egitim sonlandiriliyor.")
+                    print("[EarlyStopping] Limit aşıldı. Eğitim sonlandırılıyor.")
         else:
             self.best_loss = val_loss
             self.save_checkpoint(val_loss, model)
@@ -44,7 +44,7 @@ class EarlyStopping:
     def save_checkpoint(self, val_loss, model):
 
         if self.verbose and self.val_loss_min != np.Inf:
-            print(f"[EarlyStopping] Validation loss azaldi ({self.val_loss_min:.6f} --> {val_loss:.6f}). En iyi model kaydediliyor...")
+            print(f"[EarlyStopping] Validation loss azaldı ({self.val_loss_min:.6f} --> {val_loss:.6f}). En iyi model kaydediliyor...")
         
         torch.save(model.state_dict(), self.checkpoint_path)
         self.val_loss_min = val_loss

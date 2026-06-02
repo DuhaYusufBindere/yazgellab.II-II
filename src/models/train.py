@@ -76,7 +76,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, max_epoch
         # Early Stopping Kontrolü
         early_stopping(val_loss, model)
         if early_stopping.early_stop:
-            print("-> Early stopping tetiklendi. Egitim sonlandiriliyor.")
+            print("-> Early stopping tetiklendi. Eğitim sonlandırılıyor.")
             break
             
     # En iyi model ağırlıklarını geri yükle
@@ -91,7 +91,7 @@ def run_dl_pipeline(X_train, y_train, X_val, y_val, X_test, y_test, model_name, 
         
     # Cihaz seçimi (GPU varsa CUDA, yoksa CPU)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"[INFO] Model {model_name} '{device}' cihazi uzerinde calistirilacak.")
+    print(f"[INFO] Model {model_name} '{device}' cihazı üzerinde çalıştırılacak.")
     
     # 1. DataLoader'ları oluştur (Zaman sırasını bozmamak için shuffle=False tutulur)
     sequence_length = config.get("deep_learning", {}).get("sequence_length", 10)
@@ -117,7 +117,7 @@ def run_dl_pipeline(X_train, y_train, X_val, y_val, X_test, y_test, model_name, 
                 "GRUClassifier henüz kodlanmadı (Madde 6.7). Lütfen önce onu tanımlayın veya model adını değiştirin."
             )
     else:
-        raise ValueError(f"Bilinmeyen model tipi: {model_name}. Lütfen 'LSTM', 'CNN' veya 'GRU' secin.")
+        raise ValueError(f"Bilinmeyen model tipi: {model_name}. Lütfen 'LSTM', 'CNN' veya 'GRU' seçin.")
         
     model = model.to(device)
     
@@ -144,7 +144,7 @@ def run_dl_pipeline(X_train, y_train, X_val, y_val, X_test, y_test, model_name, 
     # 5. Test seti üzerinde tahmin üret
     test_loss, preds, targets = evaluate_model(model, test_loader, criterion, device)
     
-    print(f"[SUCCESS] {model_name} egitimi ve test degerlendirmesi tamamlandi! Test Loss: {test_loss:.6f}")
+    print(f"[SUCCESS] {model_name} eğitimi ve test değerlendirmesi tamamlandı! Test Loss: {test_loss:.6f}")
     
     return {
         "model": model,
