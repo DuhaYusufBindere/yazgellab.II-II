@@ -21,7 +21,7 @@ class EarlyStopping:
         self.counter = 0
         self.best_loss = None
         self.early_stop = False
-        self.val_loss_min = np.Inf
+        self.val_loss_min = np.inf
 
     def __call__(self, val_loss, model):
 
@@ -43,7 +43,7 @@ class EarlyStopping:
 
     def save_checkpoint(self, val_loss, model):
 
-        if self.verbose and self.val_loss_min != np.Inf:
+        if self.verbose and self.val_loss_min != np.inf:
             print(f"[EarlyStopping] Validation loss azaldı ({self.val_loss_min:.6f} --> {val_loss:.6f}). En iyi model kaydediliyor...")
         
         torch.save(model.state_dict(), self.checkpoint_path)
