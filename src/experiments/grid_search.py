@@ -20,10 +20,11 @@ def run_grid_search(experiment_fn, **kwargs):
                 alphabet_size=alphabet_size,
                 **kwargs
             )
-            result["seed"] = seed
-            result["window_size"] = window_size
-            result["alphabet_size"] = alphabet_size
-            all_results.append(result)
+            
+            if isinstance(result, list):
+                all_results.extend(result)
+            else:
+                all_results.append(result)
 
     print(f"[GRID] Toplam {len(all_results)} kombinasyon tamamlandı.")
     return all_results

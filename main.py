@@ -9,9 +9,9 @@ from src.data.batadal_loader import load_batadal_training, drop_time_columns, se
 from src.data.splitter import batadal_train_split, batadal_val_split, batadal_test_split
 from src.data.scaler import get_scaler, fit_scaler_on_train, transform_with_scaler
 from src.models.train import run_dl_pipeline
+from src.models.automata_pipeline import run_automata_pipeline
 from utils.metrics import calculate_metrics
 from utils.logger import log_experiment_result
-
 def prepare_batadal_data(config):
     df = load_batadal_training(config)
     df = ensure_temporal_order(df)
@@ -47,35 +47,49 @@ def run_single_experiment(seed, window_size=4, alphabet_size=3, scenario="normal
         pass
         
     # 3. DL Modeli (Eğitim ve Test)
-    # LSTM modelini çalıştırıyoruz
+    print(f"[AŞAMA] Derin Öğrenme (LSTM) Modeli Çalıştırılıyor...")
     input_size = X_train.shape[1]
     dl_results = run_dl_pipeline(X_train, y_train, X_val, y_val, X_test, y_test, model_name="LSTM", input_size=input_size, config=config)
     
-    # 4. Otomata Modeli (Buraya eklenebilir)
-    # automata_results = run_automata_pipeline(...)
+    # 4. Otomata Modeli (Eğitim ve Test)
+    print(f"[AŞAMA] Probabilistic Automata Modeli Çalıştırılıyor...")
+    automata_results = run_automata_pipeline(X_train, y_train, X_test, y_test, window_size=window_size, alphabet_size=alphabet_size)
     
-    # Metrikleri hesapla (Faz 12.1)
-    y_pred = dl_results["predictions"]
-    y_true = dl_results["targets"]
-    metrics = calculate_metrics(y_true, y_pred)
-    
-    result = {
+    # DL Metrikleri
+    dl_metrics = calculate_metrics(dl_results["targets"], dl_results["predictions"])
+    dl_log = {
         "dataset": dataset_name,
+        "model_name": "LSTM",
         "scenario": scenario,
         "seed": seed,
         "window_size": window_size,
         "alphabet_size": alphabet_size,
         "status": "Success",
-        "accuracy": metrics["accuracy"],
-        "precision": metrics["precision"],
-        "recall": metrics["recall"],
-        "f1_score": metrics["f1_score"]
+        "accuracy": dl_metrics["accuracy"],
+        "precision": dl_metrics["precision"],
+        "recall": dl_metrics["recall"],
+        "f1_score": dl_metrics["f1_score"]
     }
+    log_experiment_result(dl_log)
     
-    # Sonuçları kaydet (Faz 12.2)
-    log_experiment_result(result)
+    # Automata Metrikleri
+    aut_metrics = calculate_metrics(automata_results["targets"], automata_results["predictions"])
+    aut_log = {
+        "dataset": dataset_name,
+        "model_name": "Automata",
+        "scenario": scenario,
+        "seed": seed,
+        "window_size": window_size,
+        "alphabet_size": alphabet_size,
+        "status": "Success",
+        "accuracy": aut_metrics["accuracy"],
+        "precision": aut_metrics["precision"],
+        "recall": aut_metrics["recall"],
+        "f1_score": aut_metrics["f1_score"]
+    }
+    log_experiment_result(aut_log)
     
-    return result
+    return [dl_log, aut_log]
 
 def main():
     print("==================================================")
@@ -84,6 +98,11 @@ def main():
     
     config = load_config()
     
+    csv_path = "results/experiment_results.csv"
+    if os.path.exists(csv_path):
+        os.remove(csv_path)
+        print(f"[INFO] Eski test verisi ({csv_path}) silindi, tamamen yeni eğitim başlıyor!")
+        
     # Veriyi bir kez dışarıda yükleyip tüm deneylere parametre olarak geçiyoruz
     print("[INFO] BATADAL Veri seti hazırlanıyor...")
     X_train_b, y_train_b, X_val_b, y_val_b, X_test_b, y_test_b = prepare_batadal_data(config)

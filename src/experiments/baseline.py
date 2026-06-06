@@ -20,10 +20,11 @@ def run_baseline_comparison(experiment_fn, **kwargs):
         **kwargs
     )
     
-    result["seed"] = seed
-    result["window_size"] = window_size
-    result["alphabet_size"] = alphabet_size
-    result["is_baseline"] = True
+    if isinstance(result, list):
+        for r in result:
+            r["is_baseline"] = True
+    else:
+        result["is_baseline"] = True
     
     print("[BASELINE] Deney tamamlandı.")
     

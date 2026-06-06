@@ -60,16 +60,16 @@ def ensure_temporal_order(df):
         # Tarih formatı: '04/07/16 00' (Gün/Ay/Yıl Saat)
         temp_dt = pd.to_datetime(df["DATETIME"], format="%d/%m/%y %H")
         if not temp_dt.is_monotonic_increasing:
-            print("⚠️ Uyarı: Veri kronolojik sırada değil! Sıralanıyor...")
+            print("[UYARI] Uyarı: Veri kronolojik sırada değil! Sıralanıyor...")
             df = df.iloc[temp_dt.argsort()].reset_index(drop=True)
         else:
-            print("✅ Veri sırası kontrol edildi: Kronolojik sıra (Temporal Order) korundu.")
+            print("[OK] Veri sırası kontrol edildi: Kronolojik sıra (Temporal Order) korundu.")
     else:
         if not df.index.is_monotonic_increasing:
-            print("⚠️ Uyarı: Veri indeks sırası bozuk! Sıralanıyor...")
+            print("[UYARI] Uyarı: Veri indeks sırası bozuk! Sıralanıyor...")
             df = df.sort_index().reset_index(drop=True)
         else:
-            print("✅ Veri sırası kontrol edildi: İndeks sıralaması korundu.")
+            print("[OK] Veri sırası kontrol edildi: İndeks sıralaması korundu.")
             
     return df
 
