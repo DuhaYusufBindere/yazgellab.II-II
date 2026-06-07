@@ -7,6 +7,8 @@ from src.models.lstm_model import LSTMClassifier
 from src.models.cnn_model import CNN1DClassifier
 from src.models.optimization import get_loss_and_optimizer
 from src.models.callbacks import EarlyStopping
+import uuid
+import os
 
 
 def train_one_epoch(model, dataloader, criterion, optimizer, device):
@@ -80,7 +82,10 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, max_epoch
             break
             
     # En iyi model ağırlıklarını geri yükle
-    model.load_state_dict(torch.load(checkpoint_path, weights_only=True))
+    if os.path.exists(checkpoint_path):
+        model.load_state_dict(torch.load(checkpoint_path, weights_only=True))
+        os.remove(checkpoint_path)
+        
     return model, train_losses, val_losses
 
 
@@ -127,7 +132,7 @@ def run_dl_pipeline(X_train, y_train, X_val, y_val, X_test, y_test, model_name, 
     # 4. Modeli eğit
     max_epochs = config.get("deep_learning", {}).get("max_epochs", 50)
     patience = config.get("deep_learning", {}).get("early_stopping_patience", 5)
-    checkpoint_path = f"best_{model_name.lower()}_checkpoint.pt"
+    checkpoint_path = f"best_{model_name.lower()}_{uuid.uuid4().hex[:8]}.pt"
     
     model, train_losses, val_losses = train_model(
         model=model,

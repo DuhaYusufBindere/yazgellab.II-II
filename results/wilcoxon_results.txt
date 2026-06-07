@@ -1,0 +1,2 @@
+Wilcoxon Test Istatistigi: 0.0000, p-degeri: 5.2101e-15
+Sonuc: p < 0.05. Iki model arasindaki performans farki istatistiksel olarak ANLAMLIDIR.

@@ -7,8 +7,9 @@ from sklearn.decomposition import PCA
 from src.models.paa import paa_transform
 from src.models.sax import sax_transform
 from src.models.automata import extract_patterns, count_transitions, compute_probabilities
-from src.utils.visualization import plot_transition_heatmap, plot_automata_state_diagram, plot_parameter_sensitivity
-
+from src.models.automata_pipeline import run_automata_pipeline
+from src.utils.visualization import plot_transition_heatmap, plot_automata_state_diagram, plot_parameter_sensitivity, plot_confusion_matrix, plot_roc_curve
+from src.data.splitter import batadal_train_split, batadal_test_split
 def generate_real_visuals():
     print("[INFO] Gerçek veriler yükleniyor...")
     config = load_config()
@@ -65,6 +66,24 @@ def generate_real_visuals():
         state_counts.append(num_states)
         
     plot_parameter_sensitivity(window_sizes, state_counts, title="Window Size vs Benzersiz Durum Sayısı", save_path='results/graphs/real_sensitivity.png')
+    
+    # ---------------------------------------------------------
+    # C) Confusion Matrix & ROC Eğrisi (Test Seti Üzerinden)
+    # ---------------------------------------------------------
+    print("[INFO] Confusion Matrix ve ROC Eğrisi için Test Seti Değerlendirmesi Yapılıyor...")
+    
+    X_train_split, y_train_split = batadal_train_split(X, y, config)
+    X_test_split, y_test_split = batadal_test_split(X, y, config)
+    
+    sc = get_scaler(config)
+    sc = fit_scaler_on_train(sc, X_train_split)
+    X_train_sc = transform_with_scaler(sc, X_train_split)
+    X_test_sc = transform_with_scaler(sc, X_test_split)
+    
+    res = run_automata_pipeline(X_train_sc, y_train_split, X_test_sc, y_test_split, window_size=opt_window, alphabet_size=opt_alphabet)
+    
+    plot_confusion_matrix(res["targets"], res["predictions"], title="Automata Confusion Matrix (BATADAL)", save_path='results/graphs/confusion_matrix.png')
+    plot_roc_curve(res["targets"], res["predictions"], title="Automata ROC Curve (BATADAL)", save_path='results/graphs/roc_curve.png')
     
     print("[SUCCESS] Tüm gerçek grafikler başarıyla oluşturuldu ve 'results/graphs/' klasörüne kaydedildi!")
 
